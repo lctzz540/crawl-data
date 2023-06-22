@@ -191,6 +191,7 @@ func main() {
 	} else if *plot {
 		fmt.Println("Plotting graph...")
 		plotGraph()
+		plotTotalGraph()
 	} else if *removeDuplicate {
 		fmt.Println("Removing duplicate data...")
 		_ = removeDuplicateData("data.csv")
