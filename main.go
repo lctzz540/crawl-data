@@ -85,10 +85,8 @@ func updateData() {
 	var wg sync.WaitGroup
 	idCh := make(chan int)
 
-	// Define the number of threads (goroutines)
 	numThreads := 10
 
-	// Launch goroutines
 	for i := 0; i < numThreads; i++ {
 		wg.Add(1)
 		go func() {
@@ -108,15 +106,12 @@ func updateData() {
 		}()
 	}
 
-	// Send IDs to the channel
 	for id := 90000; id < 1000000; id++ {
 		idCh <- id
 	}
 
-	// Close the channel to signal that no more IDs will be sent
 	close(idCh)
 
-	// Wait for all goroutines to finish
 	wg.Wait()
 
 	fmt.Println("Data inserted successfully!")
