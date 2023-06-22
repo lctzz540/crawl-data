@@ -17,6 +17,7 @@ func generateLabels(start, end, step float64) []string {
 	}
 	return labels
 }
+
 func generateBarItems(counts map[float64]int) []opts.BarData {
 	items := make([]opts.BarData, 0)
 	for i := 0.0; i <= 10.0; i += 0.25 {
@@ -25,13 +26,12 @@ func generateBarItems(counts map[float64]int) []opts.BarData {
 	return items
 }
 
-func plotgraph() {
+func plotGraph() {
 	for subject := 1; subject <= 3; subject++ {
 		file, err := os.Open("data.csv")
 		if err != nil {
 			panic(err)
 		}
-
 		defer file.Close()
 
 		scanner := bufio.NewScanner(file)
@@ -48,7 +48,7 @@ func plotgraph() {
 		for scanner.Scan() {
 			line := scanner.Text()
 			fields := strings.Split(line, ",")
-			score, err := strconv.ParseFloat(fields[subject], 64)
+			score, err := strconv.ParseFloat(strings.TrimSpace(fields[subject]), 64)
 			if err != nil {
 				panic(err)
 			}
@@ -73,7 +73,7 @@ func plotgraph() {
 		bar.SetGlobalOptions(
 			charts.WithTitleOpts(opts.Title{
 				Title:    subjectTitle + " Score Distribution",
-				Subtitle: "Count of scores within specific ranges",
+				Subtitle: "Count of scores within specific ranges. Total: " + strconv.Itoa(len(subjectScores)),
 			}),
 		)
 
