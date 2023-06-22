@@ -85,7 +85,7 @@ func updateData() {
 	var wg sync.WaitGroup
 	idCh := make(chan int)
 
-	numThreads := 10
+	numThreads := 300
 
 	for i := 0; i < numThreads; i++ {
 		wg.Add(1)
