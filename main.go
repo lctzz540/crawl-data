@@ -130,7 +130,6 @@ func removeDuplicateData(filePath string) error {
 		return fmt.Errorf("failed to read data: %w", err)
 	}
 
-	// Map to track existing IDs
 	existingIDs := make(map[int]bool)
 	var uniqueData [][]string
 
@@ -140,30 +139,25 @@ func removeDuplicateData(filePath string) error {
 			return fmt.Errorf("failed to convert ID: %w", err)
 		}
 
-		// Check if ID already exists
 		if !existingIDs[id] {
 			existingIDs[id] = true
 			uniqueData = append(uniqueData, row)
 		}
 	}
 
-	// Print the number of data entries before and after removing duplicates
 	fmt.Println("Number of data entries before removing duplicates:", len(allData))
 	fmt.Println("Number of data entries after removing duplicates:", len(uniqueData))
 
-	// Truncate the file
 	err = file.Truncate(0)
 	if err != nil {
 		return fmt.Errorf("failed to truncate file: %w", err)
 	}
 
-	// Move file pointer to the beginning
 	_, err = file.Seek(0, 0)
 	if err != nil {
 		return fmt.Errorf("failed to seek file: %w", err)
 	}
 
-	// Write the unique data back to the file
 	writer := csv.NewWriter(file)
 	err = writer.WriteAll(uniqueData)
 	if err != nil {
@@ -181,20 +175,20 @@ func removeDuplicateData(filePath string) error {
 func main() {
 	update := flag.Bool("update", false, "Update Data")
 	plot := flag.Bool("plot", false, "Plot Graph")
-	removeDuplicate := flag.Bool("remove_duplicate", false, "Remove duplicate data from data.csv")
 
 	flag.Parse()
 
 	if *update {
 		fmt.Println("Updating data...")
 		updateData()
+		err := removeDuplicateData("data.csv")
+		if err != nil {
+			fmt.Println(err)
+		}
 	} else if *plot {
 		fmt.Println("Plotting graph...")
 		plotGraph()
 		plotTotalGraph()
-	} else if *removeDuplicate {
-		fmt.Println("Removing duplicate data...")
-		_ = removeDuplicateData("data.csv")
 	} else {
 		flag.PrintDefaults()
 	}
